@@ -6,6 +6,9 @@ const request =  axios.create({
 })
 // 请求拦截
 request.interceptors.request.use(config=>{
+    let token = localStorage.getItem("adminToken");
+
+    token?config.headers.Authorization="Bearer "+token:null;
     return config;
 },error=>{
     return Promise.reject(error);

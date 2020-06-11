@@ -12,10 +12,11 @@ export default {
             }
         })
     },
-    getInfo(token){
+    getInfo(){
         return request({
-            method:"get",
-            url:`/menu/info/${token}`
+            method:"post",
+            url:"/menu/info",
+            
         })
        
     }

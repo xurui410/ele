@@ -42,24 +42,28 @@ export default {
         onSubmit(formName){
             this.$refs[formName].validate(val=>{
                 if(val){
+                    console.log(this.form)
                     loginApi.login(this.form.username,this.form.password).then(response=>{
                         let res = response.data;
-                        if(res.flag){
-                            loginApi.getInfo(res.data.token).then(response=>{
+                        console.log(res)
+                        localStorage.setItem("adminToken",res.data.remember_token)
+                        if(res.code == 200){
+                            console.log(111)
+                            loginApi.getInfo().then(response=>{
                                let resUser = response.data;
                                console.log(resUser)
-                               if(resUser.flag){
+                               if(resUser.code==200){
                                     //将用户信息存储到本地
                                     localStorage.setItem("adminInfo",JSON.stringify(resUser.data))
                                     //将token存储到本地
-                                    localStorage.setItem("adminToken",res.data.token)
+                                    
                                     //跳转到首页
                                     this.$router.push("/");
                                }else{
                                    this.$message({
                                         duration : 1 * 1000,
                                         showClose: true,
-                                        message: res.message,
+                                        message: res.msg,
                                         type: 'warning'
                                    });
                                } 
@@ -68,7 +72,7 @@ export default {
                             this.$message({
                                 duration : 1 * 1000,
                                 showClose: true,
-                                message: res.message,
+                                message: res.msg,
                                 type: 'warning'
                             });
                             return false;
@@ -86,7 +90,7 @@ export default {
 
 <style lang='scss' scoped>
 .login-form{
-    width: 400px;
+    width: 350px;
     height: 300px;
     background: rgba(255,255,255,0.8);
     margin:0 auto;
@@ -102,7 +106,6 @@ export default {
         padding-top:20px;
         text-align: center;
     }
-    
 }
 .login-container{
     width: 100%;
